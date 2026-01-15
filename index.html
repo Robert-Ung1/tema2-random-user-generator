@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Utilizator Random</title>
+    <style>
+        /* CSS: Aspectul paginii */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        #user-photo {
+            border-radius: 50%;
+            border: 4px solid #007bff;
+            margin-bottom: 1rem;
+            width: 128px;
+            height: 128px;
+        }
+
+        h2 { margin: 10px 0; color: #333; }
+        p { color: #666; font-size: 0.9rem; word-break: break-all; }
+
+        button {
+            margin-top: 1.5rem;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <img id="user-photo" src="https://via.placeholder.com/150" alt="Poză utilizator">
+        <h2 id="user-name">Nume Utilizator</h2>
+        <p id="user-email">email@exemplu.com</p>
+        <button id="btn-generate">Generează Utilizator</button>
+    </div>
+
+    <script>
+        // JS: Logica pentru preluarea datelor
+        const btn = document.getElementById('btn-generate');
+        const photo = document.getElementById('user-photo');
+        const nameDisplay = document.getElementById('user-name');
+        const emailDisplay = document.getElementById('user-email');
+
+        async function fetchUser() {
+            try {
+                // Afișăm o stare de încărcare scurtă
+                nameDisplay.innerText = "Se încarcă...";
+
+                const response = await fetch('https://randomuser.me/api/');
+                const data = await response.json();
+                const user = data.results[0];
+
+                // Actualizăm elementele HTML cu datele primite
+                photo.src = user.picture.large;
+                nameDisplay.innerText = `${user.name.first} ${user.name.last}`;
+                emailDisplay.innerText = user.email;
+
+            } catch (error) {
+                console.error("Eroare la preluarea datelor:", error);
+                nameDisplay.innerText = "Eroare!";
+            }
+        }
+
+        // Adăugăm evenimentul de click pe buton
+        btn.addEventListener('click', fetchUser);
+
+        // Chemăm funcția o dată la început pentru a nu avea un card gol
+        fetchUser();
+    </script>
+</body>
+</html>
