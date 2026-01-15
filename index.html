@@ -3,71 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Utilizator - Varianta Tehnică</title>
+    <title>Profil Utilizator Random - Tabel</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #eceff1; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        img { border-radius: 50%; width: 100px; height: 100px; background: #ddd; }
-        button { margin-top: 20px; padding: 10px; cursor: pointer; width: 100%; }
-        .error-text { color: red; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Containerul principal */
+        .profile-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Element media pentru poză */
+        .profile-media img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #e0e0e0;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Stiluri tabel */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Buton */
+        .btn-load {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-load:hover {
+            background-color: #34495e;
+        }
+
+        .loading-text { color: #888; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <img id="user-photo" src="" alt="Foto">
-        <h3 id="user-name">Apasă butonul...</h3>
-        <p id="user-email">-</p>
-        <button id="btn-fetch">Generează Utilizator Nou</button>
-    </div>
+    <main class="profile-container">
+        <div class="profile-media">
+            <img id="user-photo" src="https://via.placeholder.com/150" alt="Poză profil">
+        </div>
+
+        <h2 id="user-full-name">Nume Utilizator</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Gen</th>
+                    <th>Țară</th>
+                    <th>Oraș</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="cell-gender">-</td>
+                    <td id="cell-country">-</td>
+                    <td id="cell-city">-</td>
+                    <td id="cell-email">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button id="btn-load" class="btn-load">Încarcă utilizator nou</button>
+    </main>
 
     <script>
-        const btn = document.getElementById('btn-fetch');
-        const photo = document.getElementById('user-photo');
-        const nameDisplay = document.getElementById('user-name');
-        const emailDisplay = document.getElementById('user-email');
+        const btn = document.getElementById('btn-load');
+        
+        // Maparea elementelor din DOM
+        const ui = {
+            photo: document.getElementById('user-photo'),
+            name: document.getElementById('user-full-name'),
+            gender: document.getElementById('cell-gender'),
+            country: document.getElementById('cell-country'),
+            city: document.getElementById('cell-city'),
+            email: document.getElementById('cell-email')
+        };
 
-        // 1. Folosim Async/Await pentru o sintaxă curată
-        async function getRandomUser() {
-            console.log('Cerere trimisă...'); // Log cerere trimisă
+        async function fetchRandomUser() {
+            console.log('Cerere trimisă...');
             
-            // 2. Bloc Try/Catch pentru gestionarea erorilor
             try {
                 const response = await fetch('https://randomuser.me/api/');
-
-                // Verificăm dacă răspunsul HTTP este de succes (status 200-299)
+                
                 if (!response.ok) {
-                    throw new Error(`Eroare HTTP! Status: ${response.status}`);
+                    throw new Error(`Eroare HTTP: ${response.status}`);
                 }
 
                 const data = await response.json();
+                console.log('Date primite cu succes');
                 
-                // 3. Log date primite cu succes
-                console.log('Date primite cu succes', data);
-
                 const user = data.results[0];
-                updateUI(user);
+                populateTable(user);
 
             } catch (error) {
-                // 3. Log eroare
                 console.error('Eroare la preluarea datelor:', error);
-                
-                // 4. Alertă în browser pentru utilizator
-                alert("A apărut o eroare la conectarea cu serverul. Te rugăm să încerci din nou.");
-                
-                nameDisplay.innerText = "Eroare la încărcare";
-                nameDisplay.className = "error-text";
+                alert('Eșec la încărcarea datelor. Verifică conexiunea la internet.');
             }
         }
 
-        function updateUI(user) {
-            nameDisplay.className = ""; // Resetăm clasa de eroare dacă există
-            photo.src = user.picture.large;
-            nameDisplay.innerText = `${user.name.first} ${user.name.last}`;
-            emailDisplay.innerText = user.email;
+        function populateTable(user) {
+            ui.photo.src = user.picture.large;
+            ui.name.innerText = `${user.name.first} ${user.name.last}`;
+            ui.gender.innerText = user.gender === 'male' ? 'Masculin' : 'Feminin';
+            ui.country.innerText = user.location.country;
+            ui.city.innerText = user.location.city;
+            ui.email.innerText = user.email;
         }
 
-        btn.addEventListener('click', getRandomUser);
+        btn.addEventListener('click', fetchRandomUser);
+
+        // Încărcare inițială
+        fetchRandomUser();
     </script>
+
 </body>
 </html>

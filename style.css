@@ -1,0 +1,123 @@
+/* Resetare de bază pentru un aspect uniform */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f4f8; /* Fundal deschis, tipic dashboard-urilor */
+    color: #2d3748;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Containerul principal - stil Card de Dashboard */
+.profile-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    padding: 40px;
+    border-radius: 20px; /* Colțuri pronunțat rotunjite */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Umbră discretă */
+    text-align: center;
+}
+
+/* Secțiunea Media */
+.profile-media img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #edf2f7;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.profile-media img:hover {
+    transform: scale(1.05); /* Efect discret de mărire la hover pe poză */
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #1a202c;
+}
+
+/* Stilarea Tabelului */
+table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;
+    margin-bottom: 30px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden; /* Asigură rotunjirea colțurilor tabelului */
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: #f8fafc;
+    color: #718096;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+tr:last-child td {
+    border-bottom: none; /* Elimină linia de jos pentru ultimul rând */
+}
+
+td {
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+/* Stilarea Butonului */
+.btn-load {
+    background-color: #4c51bf; /* Indigo modern */
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%; /* Buton pe toată lățimea pentru aspect de dashbaord */
+    box-shadow: 0 4px 6px rgba(76, 81, 191, 0.2);
+}
+
+/* Efecte Vizuale Buton */
+.btn-load:hover {
+    background-color: #434190;
+    transform: translateY(-2px); /* Efect de ridicare */
+    box-shadow: 0 7px 14px rgba(76, 81, 191, 0.3);
+}
+
+.btn-load:active {
+    transform: translateY(0); /* Revine la apăsare */
+}
+
+/* Responsivitate pentru ecrane mici */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    th, td {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+}
